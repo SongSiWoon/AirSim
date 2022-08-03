@@ -692,6 +692,18 @@ void UAirBlueprintLib::FollowActor(AActor* follower, const AActor* followee, con
     follower->SetActorRotation(next_rot);
 }
 
+void UAirBlueprintLib::FollowRotActor(AActor* follower, const AActor* followee)
+{
+    //can we see followee?
+    if (followee == nullptr) {
+        return;
+    }
+
+    FRotator next_rot = UKismetMathLibrary::FindLookAtRotation(follower->GetActorLocation(), followee->GetActorLocation());
+    next_rot = FMath::Lerp(follower->GetActorRotation(), next_rot, 0.5f);
+    follower->SetActorRotation(next_rot);
+}
+
 int UAirBlueprintLib::RemoveAxisBinding(const FInputAxisKeyMapping& axis, FInputAxisBinding* axis_binding, AActor* actor)
 {
     if (axis_binding != nullptr && actor != nullptr) {

@@ -19,7 +19,8 @@ enum class ECameraDirectorMode : uint8
     CAMERA_DIRECTOR_MODE_SPRINGARM_CHASE = 4 UMETA(DisplayName = "SpringArmChase"),
     CAMERA_DIRECTOR_MODE_BACKUP = 5 UMETA(DisplayName = "Backup"),
     CAMERA_DIRECTOR_MODE_NODISPLAY = 6 UMETA(DisplayName = "No Display"),
-    CAMERA_DIRECTOR_MODE_FRONT = 7 UMETA(DisplayName = "Front")
+    CAMERA_DIRECTOR_MODE_FRONT = 7 UMETA(DisplayName = "Front"),
+    CAMERA_DIRECTOR_MODE_PILOT = 8 UMETA(DisplayName = "Pilot"),
 };
 
 UCLASS()
@@ -44,6 +45,7 @@ public:
     void inputEventBackupView();
     void inputEventNoDisplayView();
     void inputEventFrontView();
+    void inputEventPilotView();
 
 public:
     ACameraDirector();

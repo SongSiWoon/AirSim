@@ -639,6 +639,8 @@ namespace airlib
                 initial_view_mode = 6; // ECameraDirectorMode::CAMREA_DIRECTOR_MODE_NODISPLAY;
             else if (view_mode_string == "Front")
                 initial_view_mode = 7; // ECameraDirectorMode::CAMREA_DIRECTOR_MODE_FRONT;
+            else if (view_mode_string == "Pilot")
+            initial_view_mode = 8; // ECameraDirectorMode::CAMERA_DIRECTOR_MODE_PILOT;
             else
                 error_messages.push_back("ViewMode setting is not recognized: " + view_mode_string);
         }
