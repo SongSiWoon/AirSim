@@ -21,6 +21,7 @@ enum class ECameraDirectorMode : uint8
     CAMERA_DIRECTOR_MODE_NODISPLAY = 6 UMETA(DisplayName = "No Display"),
     CAMERA_DIRECTOR_MODE_FRONT = 7 UMETA(DisplayName = "Front"),
     CAMERA_DIRECTOR_MODE_PILOT = 8 UMETA(DisplayName = "Pilot"),
+    CAMERA_DIRECTOR_MODE_VR = 9 UMETA(DisplayName = "VR")
 };
 
 UCLASS()
@@ -46,6 +47,7 @@ public:
     void inputEventNoDisplayView();
     void inputEventFrontView();
     void inputEventPilotView();
+    void inputEventVRView();
 
 public:
     ACameraDirector();

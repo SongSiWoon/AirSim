@@ -1,6 +1,7 @@
 #include "CameraDirector.h"
 #include "GameFramework/PlayerController.h"
 #include "AirBlueprintLib.h"
+#include <iostream>
 
 ACameraDirector::ACameraDirector()
 {
@@ -33,6 +34,9 @@ void ACameraDirector::Tick(float DeltaTime)
     }
     else if (mode_ == ECameraDirectorMode::CAMERA_DIRECTOR_MODE_PILOT) {
         UAirBlueprintLib::FollowRotActor(ExternalCamera, follow_actor_);
+    }
+    else if (mode_ == ECameraDirectorMode::CAMERA_DIRECTOR_MODE_VR) {
+        //do nothing, we have camera turned off
     }
     else if (mode_ == ECameraDirectorMode::CAMERA_DIRECTOR_MODE_SPRINGARM_CHASE) {
         //do nothing, spring arm is pulling the camera with it
@@ -97,6 +101,9 @@ void ACameraDirector::initializeForBeginPlay(ECameraDirectorMode view_mode,
         break;
     case ECameraDirectorMode::CAMERA_DIRECTOR_MODE_PILOT:
         inputEventPilotView();
+        break;
+    case ECameraDirectorMode::CAMERA_DIRECTOR_MODE_VR:
+        inputEventVRView();
         break;
     default:
         throw std::out_of_range("Unsupported view mode specified in CameraDirector::initializeForBeginPlay");
@@ -202,6 +209,7 @@ void ACameraDirector::setupInputBindings()
     UAirBlueprintLib::BindActionToKey("inputEventNoDisplayView", EKeys::Hyphen, this, &ACameraDirector::inputEventNoDisplayView);
     UAirBlueprintLib::BindActionToKey("inputEventFrontView", EKeys::I, this, &ACameraDirector::inputEventFrontView);
     UAirBlueprintLib::BindActionToKey("inputEventPilotView", EKeys::P, this, &ACameraDirector::inputEventPilotView);
+    UAirBlueprintLib::BindActionToKey("inputEventVRView", EKeys::V, this, &ACameraDirector::inputEventVRView);
 }
 
 void ACameraDirector::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -270,16 +278,30 @@ void ACameraDirector::inputEventManualView()
 void ACameraDirector::inputEventPilotView()
 {
     if (ExternalCamera) {
-        UAirBlueprintLib::LogMessageString("Camera PILOT: ", "ExternalCamera", LogDebugLevel::Failure);
+        UAirBlueprintLib::LogMessageString("Camera PILOT: ", "ExternalCamera", LogDebugLevel::Informational);
         setMode(ECameraDirectorMode::CAMERA_DIRECTOR_MODE_PILOT);
+        ExternalCamera->SetActorLocation(camera_start_location_);
         ExternalCamera->showToScreen();
-
         disableCameras(true, true, false, true);
     }
     else
         UAirBlueprintLib::LogMessageString("Camera is not available: ", "ExternalCamera", LogDebugLevel::Failure);
 
     notifyViewModeChanged();
+}
+
+void ACameraDirector::inputEventVRView()
+{
+    if (ExternalCamera) {
+        UAirBlueprintLib::LogMessageString("Camera VR: ", "ExternalCamera", LogDebugLevel::Informational);
+        setMode(ECameraDirectorMode::CAMERA_DIRECTOR_MODE_VR);
+        ExternalCamera->SetActorLocation(camera_start_location_);
+        ExternalCamera->SetActorRotation(camera_start_rotation_);
+        ExternalCamera->showToScreen();
+        disableCameras(true, true, false, true);
+    }
+    else
+        UAirBlueprintLib::LogMessageString("Camera is not available: ", "ExternalCamera", LogDebugLevel::Failure);
 
     notifyViewModeChanged();
 }
